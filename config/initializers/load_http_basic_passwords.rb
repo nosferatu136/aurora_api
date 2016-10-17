@@ -1,0 +1,1 @@
+HTTP_AUTHENTICATIONS = YAML.load_file(Rails.root.join('config', 'http_authentication.yml'))
