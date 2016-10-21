@@ -1,4 +1,6 @@
 class Album < ActiveRecord::Base
+  include RequiresArtist
+
   attr_accessible :name, :artist_id, :art_id, :released_at
 
   belongs_to :artist
@@ -6,4 +8,5 @@ class Album < ActiveRecord::Base
   has_many :songs, through: :album_songs
 
   validates :name, :artist_id, :released_at, presence: true
+  validate  :artist_presence
 end
