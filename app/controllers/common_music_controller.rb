@@ -1,9 +1,14 @@
 class CommonMusicController < ApplicationController
 
-  before_filter :assign_music_entity, only: [:index, :update, :destroy]
+  before_filter :assign_music_entity, only: [:show, :update, :destroy]
 
   def index
     render json: music_entity_class.all
+  end
+
+  def show
+    status = @music_entity.present? ? :ok : :not_found
+    render json: { music_entity_name => @music_entity }, status: status
   end
 
   def create

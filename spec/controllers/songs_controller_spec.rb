@@ -7,6 +7,29 @@ describe SongsController do
 
   let(:artist) { Factory(:artist) }
 
+  describe 'show' do
+    def do_request(id)
+      get :show, id: id
+    end
+
+    context 'when song exists' do
+      it 'retrieves the given song' do
+        song = Factory(:song)
+        do_request(song.id)
+        expect(response).to be_success
+        expect(response.status).to eq 200
+      end
+    end
+
+    context 'when song does not exist' do
+      it 'retruns the correct response' do
+        do_request(1)
+        expect(response).not_to be_success
+        expect(response.status).to eq 404
+      end
+    end
+  end
+
   describe 'create' do
     let(:song_params) { { name: 'La Bamba', duration: 14600, artist_id: artist.id } }
     let(:json) { JSON.parse(response.body) }

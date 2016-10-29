@@ -5,6 +5,28 @@ describe AlbumsController do
 
   before { http_login }
 
+  describe 'show' do
+    def do_request(id)
+      get :show, id: id
+    end
+
+    context 'when album exists' do
+      it 'retrieves the given album' do
+        album = Factory(:album)
+        do_request(album.id)
+        expect(response).to be_success
+        expect(response.status).to eq 200
+      end
+    end
+
+    context 'when album does not exist' do
+      it 'retruns the correct response' do
+        do_request(1)
+        expect(response).not_to be_success
+        expect(response.status).to eq 404
+      end
+    end
+  end
 
   describe 'create' do
     let(:artist) { Factory(:artist, name: 'Guns n Roses') }
