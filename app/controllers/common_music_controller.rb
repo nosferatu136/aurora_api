@@ -7,6 +7,9 @@ class CommonMusicController < ApplicationController
   end
 
   def show
+    # 0 :not_found could be defined as a class constant, ensuring that you're using the same
+    # value everywhere. right now if there's a typo status could be set to "nit_found" etc.
+    # same feedback for other statuses like :ok and :unprocessable_entity
     status = @music_entity.present? ? :ok : :not_found
     render json: { music_entity_name => @music_entity }, status: status
   end
@@ -36,6 +39,8 @@ class CommonMusicController < ApplicationController
     render json: {}, status: status
   end
 
+  # 0 alternative way of expressing private/protected: http://stackoverflow.com/questions/10724221/where-to-place-private-methods-in-ruby
+  # not better or worse, just FYI
   private def assign_music_entity
     @music_entity =  music_entity_class.find_by_id(params[:id])
   end

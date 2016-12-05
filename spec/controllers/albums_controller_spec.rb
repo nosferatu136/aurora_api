@@ -1,3 +1,5 @@
+# +1 great test coverage
+
 require 'rails_helper'
 
 describe AlbumsController do

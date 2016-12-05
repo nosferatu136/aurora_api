@@ -7,6 +7,10 @@ class SongListProcessor
     @action = action
   end
 
+  # -1 probably better to separate this into two methods, instead of a single method
+  #    with multiple concerns. Reason is separation of concerns; having a method that
+  #    does adds and removes could snowball into doing other types of things, and before
+  #    long "process" is a "god method" full of if/else statements and different operations
   def process
     if music_object
       if action == :add

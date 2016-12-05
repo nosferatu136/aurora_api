@@ -7,6 +7,7 @@ describe AlbumSerializer do
     album = Factory(:album, artist: artist)
     album.album_songs.create(song_id: song.id)
 
+    # ? what if we didn't want to expose numeric database IDs? how would you change the data model and serializers?
     expected_json = {
       album: {
         id: album.id,
