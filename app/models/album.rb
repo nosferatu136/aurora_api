@@ -1,4 +1,5 @@
 class Album < ActiveRecord::Base
+  include HasSongs
   include RequiresArtist
 
   attr_accessible :name, :artist_id, :art_id, :released_at
