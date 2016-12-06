@@ -1,4 +1,7 @@
 class CommonMusicController < ApplicationController
+  SUCCESS       = :ok
+  NOT_FOUND     = :not_found
+  UNPROCESSABLE = :unprocessable_entity
 
   before_filter :assign_music_entity, only: [:show, :update, :destroy]
 
@@ -7,21 +10,21 @@ class CommonMusicController < ApplicationController
   end
 
   def show
-    status = @music_entity.present? ? :ok : :not_found
+    status = @music_entity.present? ? SUCCESS : NOT_FOUND
     render json: { music_entity_name => @music_entity }, status: status
   end
 
   def create
     new_entity = music_entity_class.new(music_entity_params(params))
-    status =  new_entity.save ? :ok : :unprocessable_entity
+    status =  new_entity.save ? SUCCESS : UNPROCESSABLE
     render json: { music_entity_name => new_entity, errors: new_entity.errors.full_messages }, status: status
   end
 
   def update
     status =  if @music_entity.nil?
-                :not_found
+                NOT_FOUND
               else
-                @music_entity.update_attributes(music_entity_params(params)) ? :ok : :unprocessable_entity
+                @music_entity.update_attributes(music_entity_params(params)) ? SUCCESS : UNPROCESSABLE
               end
     errors = @music_entity.nil? ? [] : @music_entity.errors.full_messages
     render json: { music_entity_name => @music_entity, errors: errors }, status: status
@@ -29,15 +32,15 @@ class CommonMusicController < ApplicationController
 
   def destroy
     status =  if @music_entity.nil?
-                :not_found
+                NOT_FOUND
               else
-                @music_entity.destroy ? :ok : :unprocessable_entity
+                @music_entity.destroy ? SUCCESS : UNPROCESSABLE
               end
     render json: {}, status: status
   end
 
   private def assign_music_entity
-    @music_entity =  music_entity_class.find_by_id(params[:id])
+    @music_entity =  music_entity_class.find_by_id(params[:id] || params["#{music_entity_name}_id".to_sym])
   end
 
   private def music_entity_params(params)
