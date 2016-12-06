@@ -1,27 +1,15 @@
 class PlaylistsController < CommonMusicController
+  include HasSongLists
 
-  def add_songs
-    processor = PlaylistSongProcessor.new(params.slice(:playlist_id, :song_ids), :add).process
-    render json: { playlist: processor.playlist, errors: processor.errors }, status: processor.status
-  end
+  before_filter :assign_music_entity, only: [:add_songs, :remove_songs, :show, :update, :destroy]
 
-  def remove_songs
-    processor = PlaylistSongProcessor.new(params.slice(:playlist_id, :song_ids), :remove).process
-    render json: { playlist: processor.playlist, errors: processor.errors }, status: processor.status
-  end
-
-  private def music_entity_name
+  def music_entity_name
     :playlist
   end
 
-  private def music_entity_attributes
+  def music_entity_attributes
     [:name, :user_id]
   end
 
-  class PlaylistSongProcessor < SongListProcessor
-    def initialize(params, action)
-      @type = :playlist
-      super
-    end
-  end
+  private :music_entity_name, :music_entity_attributes, :process_request, :errors
 end

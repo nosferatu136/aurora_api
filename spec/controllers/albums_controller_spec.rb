@@ -125,15 +125,14 @@ describe AlbumsController do
       post :add_songs, params
     end
 
-    it 'instantiates a song processor to perform the action' do
+    it 'calls the correct method to add songs to the album' do
       album = Factory.stub(:album)
+      allow(Album).to receive(:find_by_id) { album }
       params = {
         'album_id' => album.id.to_s,
         'song_ids' => ['1', '2', '3']
       }
-      processor = double('AlbumSongProcessor', album: album, status: :ok, errors: [])
-      allow(processor).to receive(:process) { processor }
-      expect(AlbumsController::AlbumSongProcessor).to receive(:new).with(params, :add).and_return(processor)
+      expect(album).to receive(:add_songs).with(params['song_ids'])
       do_request(params)
     end
   end
@@ -143,15 +142,14 @@ describe AlbumsController do
       post :remove_songs, params
     end
 
-    it 'instantiates a song processor to perform the action' do
+    it 'calls the correct method to remove songs from the album' do
       album = Factory.stub(:album)
+      allow(Album).to receive(:find_by_id) { album }
       params = {
         'album_id' => album.id.to_s,
         'song_ids' => ['1', '2', '3']
       }
-      processor = double('AlbumSongProcessor', album: album, status: :ok, errors: [])
-      allow(processor).to receive(:process) { processor }
-      expect(AlbumsController::AlbumSongProcessor).to receive(:new).with(params, :remove).and_return(processor)
+      expect(album).to receive(:remove_songs).with(params['song_ids'])
       do_request(params)
     end
   end

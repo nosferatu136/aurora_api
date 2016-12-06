@@ -39,23 +39,26 @@ class CommonMusicController < ApplicationController
     render json: {}, status: status
   end
 
-  private def assign_music_entity
-    @music_entity =  music_entity_class.find_by_id(params[:id] || params["#{music_entity_name}_id".to_sym])
+  def assign_music_entity
+    @music_entity = music_entity_class.find_by_id(params[:id] || params["#{music_entity_name}_id".to_sym])
   end
 
-  private def music_entity_params(params)
+  def music_entity_params(params)
     params.slice(*music_entity_attributes)
   end
 
-  private def music_entity_class
+  def music_entity_class
     music_entity_name.to_s.capitalize.constantize
   end
 
-  private def music_entity_name
+  def music_entity_name
     raise NotImplementedException
   end
 
-  private def music_entity_attributes
+  def music_entity_attributes
     raise NotImplementedException
   end
+
+  private :assign_music_entity, :music_entity_params, :music_entity_class, :music_entity_name,
+          :music_entity_attributes
 end

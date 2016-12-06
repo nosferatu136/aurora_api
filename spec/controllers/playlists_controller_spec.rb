@@ -123,15 +123,14 @@ describe PlaylistsController do
       post :add_songs, params
     end
 
-    it 'instantiates a song processor to perform the action' do
+    it 'calls the correct method to add songs to the playlist' do
       playlist = Factory.stub(:playlist)
+      allow(Playlist).to receive(:find_by_id) { playlist }
       params = {
         'playlist_id' => playlist.id.to_s,
         'song_ids' => ['1', '2', '3']
       }
-      processor = double('PlaylistSongProcessor', playlist: playlist, status: :ok, errors: [])
-      allow(processor).to receive(:process) { processor }
-      expect(PlaylistsController::PlaylistSongProcessor).to receive(:new).with(params, :add).and_return(processor)
+      expect(playlist).to receive(:add_songs).with(params['song_ids'])
       do_request(params)
     end
   end
@@ -141,15 +140,14 @@ describe PlaylistsController do
       post :remove_songs, params
     end
 
-    it 'instantiates a song processor to perform the action' do
+    it 'calls the correct method to remove songs from the playlist' do
       playlist = Factory.stub(:playlist)
+      allow(Playlist).to receive(:find_by_id) { playlist }
       params = {
         'playlist_id' => playlist.id.to_s,
         'song_ids' => ['1', '2', '3']
       }
-      processor = double('PlaylistSongProcessor', playlist: playlist, status: :ok, errors: [])
-      allow(processor).to receive(:process) { processor }
-      expect(PlaylistsController::PlaylistSongProcessor).to receive(:new).with(params, :remove).and_return(processor)
+      expect(playlist).to receive(:remove_songs).with(params['song_ids'])
       do_request(params)
     end
   end
