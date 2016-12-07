@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20161018012752) do
+ActiveRecord::Schema.define(:version => 20161207010901) do
 
   create_table "album_songs", :force => true do |t|
     t.integer  "album_id"
@@ -27,7 +27,10 @@ ActiveRecord::Schema.define(:version => 20161018012752) do
     t.date     "released_at"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+    t.string   "guid"
   end
+
+  add_index "albums", ["guid"], :name => "index_albums_on_guid"
 
   create_table "artists", :force => true do |t|
     t.string   "name"
@@ -35,7 +38,10 @@ ActiveRecord::Schema.define(:version => 20161018012752) do
     t.string   "alias"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "guid"
   end
+
+  add_index "artists", ["guid"], :name => "index_artists_on_guid"
 
   create_table "playlist_songs", :force => true do |t|
     t.integer  "playlist_id"
@@ -49,7 +55,10 @@ ActiveRecord::Schema.define(:version => 20161018012752) do
     t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "guid"
   end
+
+  add_index "playlists", ["guid"], :name => "index_playlists_on_guid"
 
   create_table "songs", :force => true do |t|
     t.string   "name"
@@ -57,6 +66,9 @@ ActiveRecord::Schema.define(:version => 20161018012752) do
     t.integer  "artist_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "guid"
   end
+
+  add_index "songs", ["guid"], :name => "index_songs_on_guid"
 
 end
