@@ -1,3 +1,3 @@
 class ArtistWithoutAlbumsSerializer < ActiveModel::Serializer
-  attributes :id, :name, :bio, :alias
+  attributes :guid, :name, :bio, :alias
 end

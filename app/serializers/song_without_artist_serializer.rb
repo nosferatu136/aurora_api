@@ -1,3 +1,3 @@
 class SongWithoutArtistSerializer < ActiveModel::Serializer
-  attributes :id, :name, :duration, :artist_id
+  attributes :guid, :name, :duration, :artist_id
 end
