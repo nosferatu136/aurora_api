@@ -1,5 +1,6 @@
 class Playlist < ActiveRecord::Base
   include HasSongs
+  include AssignsGuid
 
   attr_accessible :name, :user_id
 

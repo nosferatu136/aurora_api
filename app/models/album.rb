@@ -1,6 +1,7 @@
 class Album < ActiveRecord::Base
   include HasSongs
   include RequiresArtist
+  include AssignsGuid
 
   attr_accessible :name, :artist_id, :art_id, :released_at
 

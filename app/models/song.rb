@@ -1,5 +1,6 @@
 class Song < ActiveRecord::Base
   include RequiresArtist
+  include AssignsGuid
 
   attr_accessible :name, :duration, :artist_id
 

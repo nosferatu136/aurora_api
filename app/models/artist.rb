@@ -1,4 +1,6 @@
 class Artist < ActiveRecord::Base
+  include AssignsGuid
+
   attr_accessible :name, :bio, :alias
 
   has_many :songs, dependent: :destroy
