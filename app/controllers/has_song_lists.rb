@@ -11,7 +11,7 @@ module HasSongLists
 
   def process_request(request_type)
     if @music_entity.present?
-      @music_entity.send(request_type, params[:song_ids])
+      @music_entity.send(request_type, params[:song_guids])
       CommonMusicController::SUCCESS
     else
       CommonMusicController::NOT_FOUND

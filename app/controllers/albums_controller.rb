@@ -8,7 +8,7 @@ class AlbumsController < CommonMusicController
   end
 
   def music_entity_attributes
-    [:name, :artist_id, :art_id, :released_at]
+    [:name, :artist_guid, :art_id, :released_at]
   end
 
   private :music_entity_name, :music_entity_attributes

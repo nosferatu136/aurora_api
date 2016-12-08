@@ -9,21 +9,21 @@ describe ArtistSerializer do
 
     expected_json = {
       artist: {
-        id: artist.id,
+        guid: artist.guid,
         name: artist.name,
         bio: artist.bio,
         alias: artist.alias,
         albums: [{
-          id: album.id,
+          guid: album.guid,
           name: album.name,
           art_id: album.art_id,
-          artist_id: album.artist_id,
+          artist_guid: album.artist_guid,
           released_at: album.released_at,
           songs: [{
-            id: song.id,
+            guid: song.guid,
             name: song.name,
             duration: song.duration,
-            artist_id: song.artist_id
+            artist_guid: song.artist_guid
           }]
         }]
       }

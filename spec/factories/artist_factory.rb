@@ -27,5 +27,6 @@ Factory.define(:artist) do |a|
         " this cab was rare\nBut I thought 'Man forget it' - 'Yo home to Bel Air'\n\n" \
         "I pulled up to the house about seven or eight\nAnd I yelled to the cabbie 'Yo homes smell ya later'\n" \
         "I looked to my kingdom\nI was finally there\nTo sit on my throne as the Prince of Bel Air"
+  a.guid SecureRandom.uuid
   a.alias 'The Doc'
 end

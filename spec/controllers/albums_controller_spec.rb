@@ -7,13 +7,13 @@ describe AlbumsController do
 
   describe 'show' do
     def do_request(id)
-      get :show, id: id
+      get :show, guid: id
     end
 
     context 'when album exists' do
       it 'retrieves the given album' do
         album = Factory(:album)
-        do_request(album.id)
+        do_request(album.guid)
         expect(response).to be_success
         expect(response.status).to eq 200
       end
@@ -33,7 +33,7 @@ describe AlbumsController do
     let(:album_params) do
       {
         name: 'Appetite for destruction',
-        artist_id: artist.id,
+        artist_guid: artist.guid,
         art_id: 123,
         released_at: (Date.today - 15.years)
       }
@@ -66,7 +66,7 @@ describe AlbumsController do
   describe 'update' do
     let!(:album) { Factory(:album) }
     let(:new_name) { 'The Spaghetti Incident' }
-    let(:album_params) { { id: album.id, name: new_name } }
+    let(:album_params) { { guid: album.guid, name: new_name } }
 
     def do_request(params = {})
       put :update, params
@@ -82,7 +82,7 @@ describe AlbumsController do
 
     context 'when album does not exist' do
       it 'returns the correct status' do
-        album_params[:id] = album.id + 1
+        album_params[:guid] = 'some_nice_guid'
         expect { do_request(album_params) }.not_to change { Album.count }
         expect(response.status).to eq 404
       end
@@ -97,14 +97,14 @@ describe AlbumsController do
     context 'when album exists' do
       it 'returns success' do
         album = Factory(:album)
-        do_request(id: album.id)
+        do_request(guid: album.guid)
         expect(response).to be_success
       end
     end
 
     context 'when album does not exist' do
       it 'returns 404' do
-        do_request(id: 1)
+        do_request(guid: SecureRandom.uuid)
         expect(response.status).to eq 404
       end
     end
@@ -112,9 +112,9 @@ describe AlbumsController do
     context 'when album fails to be deleted' do
       it 'returns 422' do
         album = Factory.stub(:album)
-        allow(Album).to receive(:find_by_id) { album }
+        allow(Album).to receive(:find_by_guid) { album }
         allow(album).to receive(:destroy) { false }
-        do_request(id: album.id)
+        do_request(guid: album.guid)
         expect(response.status).to eq 422
       end
     end
@@ -127,29 +127,29 @@ describe AlbumsController do
 
     it 'calls the correct method to add songs to the album' do
       album = Factory.stub(:album)
-      allow(Album).to receive(:find_by_id) { album }
+      allow(Album).to receive(:find_by_guid) { album }
       params = {
-        'album_id' => album.id.to_s,
-        'song_ids' => ['1', '2', '3']
+        'album_guid' => album.guid,
+        'song_guids' => 3.times.map { |time| SecureRandom.uuid }
       }
-      expect(album).to receive(:add_songs).with(params['song_ids'])
+      expect(album).to receive(:add_songs).with(params['song_guids'])
       do_request(params)
     end
   end
 
   describe 'remove_songs' do
     def do_request(params)
-      post :remove_songs, params
+      delete :remove_songs, params
     end
 
     it 'calls the correct method to remove songs from the album' do
       album = Factory.stub(:album)
-      allow(Album).to receive(:find_by_id) { album }
+      allow(Album).to receive(:find_by_guid) { album }
       params = {
-        'album_id' => album.id.to_s,
-        'song_ids' => ['1', '2', '3']
+        'album_guid' => album.guid,
+        'song_guids' => 3.times.map { |time| SecureRandom.uuid }
       }
-      expect(album).to receive(:remove_songs).with(params['song_ids'])
+      expect(album).to receive(:remove_songs).with(params['song_guids'])
       do_request(params)
     end
   end

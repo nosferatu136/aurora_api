@@ -9,10 +9,10 @@ describe PlaylistSerializer do
 
     expected_json = {
       playlist: {
-        id: playlist.id,
+        guid: playlist.guid,
         name: playlist.name,
         user_id: playlist.user_id,
-        songs: [{ id: song.id, name: song.name, duration: song.duration, artist_id: song.artist_id }]
+        songs: [{ guid: song.guid, name: song.name, duration: song.duration, artist_guid: song.artist_guid }]
       }
     }
 

@@ -8,10 +8,10 @@ describe SongSerializer do
 
     expected_json = {
       song: {
-        id: song.id,
+        guid: song.guid,
         name: song.name,
         duration: song.duration,
-        artist: { id: artist.id, name: artist.name, bio: artist.bio, alias: artist.alias }
+        artist: { guid: artist.guid, name: artist.name, bio: artist.bio, alias: artist.alias }
       }
     }
 

@@ -5,6 +5,6 @@ class SongsController < CommonMusicController
   end
 
   private def music_entity_attributes
-    [:name, :duration, :artist_id]
+    [:name, :duration, :artist_guid]
   end
 end

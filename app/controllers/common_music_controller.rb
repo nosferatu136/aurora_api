@@ -40,7 +40,7 @@ class CommonMusicController < ApplicationController
   end
 
   def assign_music_entity
-    @music_entity = music_entity_class.find_by_id(params[:id] || params["#{music_entity_name}_id".to_sym])
+    @music_entity = music_entity_class.find_by_guid(params[:guid] || params["#{music_entity_name}_guid".to_sym])
   end
 
   def music_entity_params(params)

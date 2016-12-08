@@ -9,7 +9,7 @@ describe ArtistWithoutAlbumsSerializer do
 
     expected_json = {
       artist_without_albums: {
-        id: artist.id,
+        guid: artist.guid,
         name: artist.name,
         bio: artist.bio,
         alias: artist.alias

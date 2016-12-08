@@ -46,7 +46,7 @@ describe ArtistsController do
   describe 'update' do
     let!(:artist) { Factory(:artist) }
     let(:new_name) { 'Godsmack' }
-    let(:artist_params) { { id: artist.id, name: new_name, bio: 'A very short bio', alias: 'Marky Mark' } }
+    let(:artist_params) { { guid: artist.guid, name: new_name, bio: 'A very short bio', alias: 'Marky Mark' } }
 
     def do_request(params = {})
       put :update, params
@@ -62,7 +62,7 @@ describe ArtistsController do
 
     context 'when artist does not exist' do
       it 'returns the correct status' do
-        artist_params[:id] = artist.id + 1
+        artist_params[:guid] = 'some_nice_guid'
         expect { do_request(artist_params) }.not_to change { Artist.count }
         expect(response.status).to eq 404
       end
@@ -77,14 +77,14 @@ describe ArtistsController do
     context 'when artist exists' do
       it 'returns success' do
         artist = Factory(:artist)
-        do_request(id: artist.id)
+        do_request(guid: artist.guid)
         expect(response).to be_success
       end
     end
 
     context 'when artist does not exist' do
       it 'returns 404' do
-        do_request(id: 1)
+        do_request(guid: 'incredible_guid')
         expect(response.status).to eq 404
       end
     end
@@ -92,9 +92,9 @@ describe ArtistsController do
     context 'when artist fails to be deleted' do
       it 'returns 422' do
         artist = Factory.stub(:artist)
-        allow(Artist).to receive(:find_by_id) { artist }
+        allow(Artist).to receive(:find_by_guid) { artist }
         allow(artist).to receive(:destroy) { false }
-        do_request(id: artist.id)
+        do_request(guid: artist.guid)
         expect(response.status).to eq 422
       end
     end

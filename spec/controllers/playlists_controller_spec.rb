@@ -6,14 +6,14 @@ describe PlaylistsController do
   before { http_login }
 
   describe 'show' do
-    def do_request(id)
-      get :show, id: id
+    def do_request(guid)
+      get :show, guid: guid
     end
 
     context 'when playlist exists' do
       it 'retrieves the given playlist' do
         playlist = Factory(:playlist)
-        do_request(playlist.id)
+        do_request(playlist.guid)
         expect(response).to be_success
         expect(response.status).to eq 200
       end
@@ -21,7 +21,7 @@ describe PlaylistsController do
 
     context 'when playlist does not exist' do
       it 'retruns the correct response' do
-        do_request(1)
+        do_request('blah')
         expect(response).not_to be_success
         expect(response.status).to eq 404
       end
@@ -64,7 +64,7 @@ describe PlaylistsController do
   describe 'update' do
     let!(:playlist) { Factory(:playlist) }
     let(:new_name) { 'Soft rock' }
-    let(:playlist_params) { { id: playlist.id, name: new_name } }
+    let(:playlist_params) { { guid: playlist.guid, name: new_name } }
 
     def do_request(params = {})
       put :update, params
@@ -80,7 +80,7 @@ describe PlaylistsController do
 
     context 'when playlist does not exist' do
       it 'returns the correct status' do
-        playlist_params[:id] = playlist.id + 1
+        playlist_params[:guid] = 'some_nice_guid'
         expect { do_request(playlist_params) }.not_to change { Playlist.count }
         expect(response.status).to eq 404
       end
@@ -95,14 +95,14 @@ describe PlaylistsController do
     context 'when playlist exists' do
       it 'returns success' do
         playlist = Factory(:playlist)
-        do_request(id: playlist.id)
+        do_request(guid: playlist.guid)
         expect(response).to be_success
       end
     end
 
     context 'when playlist does not exist' do
       it 'returns 404' do
-        do_request(id: 1)
+        do_request(guid: 'hmmm')
         expect(response.status).to eq 404
       end
     end
@@ -110,9 +110,9 @@ describe PlaylistsController do
     context 'when playlist fails to be deleted' do
       it 'returns 422' do
         playlist = Factory.stub(:playlist)
-        allow(Playlist).to receive(:find_by_id) { playlist }
+        allow(Playlist).to receive(:find_by_guid) { playlist }
         allow(playlist).to receive(:destroy) { false }
-        do_request(id: playlist.id)
+        do_request(guid: playlist.guid)
         expect(response.status).to eq 422
       end
     end
@@ -125,12 +125,12 @@ describe PlaylistsController do
 
     it 'calls the correct method to add songs to the playlist' do
       playlist = Factory.stub(:playlist)
-      allow(Playlist).to receive(:find_by_id) { playlist }
+      allow(Playlist).to receive(:find_by_guid) { playlist }
       params = {
-        'playlist_id' => playlist.id.to_s,
-        'song_ids' => ['1', '2', '3']
+        'playlist_guid' => playlist.id.to_s,
+        'song_guids' => 3.times.map { |time| SecureRandom.uuid }
       }
-      expect(playlist).to receive(:add_songs).with(params['song_ids'])
+      expect(playlist).to receive(:add_songs).with(params['song_guids'])
       do_request(params)
     end
   end
@@ -142,12 +142,12 @@ describe PlaylistsController do
 
     it 'calls the correct method to remove songs from the playlist' do
       playlist = Factory.stub(:playlist)
-      allow(Playlist).to receive(:find_by_id) { playlist }
+      allow(Playlist).to receive(:find_by_guid) { playlist }
       params = {
-        'playlist_id' => playlist.id.to_s,
-        'song_ids' => ['1', '2', '3']
+        'playlist_guid' => playlist.id.to_s,
+        'song_guids' => 3.times.map { |time| SecureRandom.uuid }
       }
-      expect(playlist).to receive(:remove_songs).with(params['song_ids'])
+      expect(playlist).to receive(:remove_songs).with(params['song_guids'])
       do_request(params)
     end
   end

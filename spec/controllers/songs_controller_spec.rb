@@ -8,14 +8,14 @@ describe SongsController do
   let(:artist) { Factory(:artist) }
 
   describe 'show' do
-    def do_request(id)
-      get :show, id: id
+    def do_request(guid)
+      get :show, guid: guid
     end
 
     context 'when song exists' do
       it 'retrieves the given song' do
         song = Factory(:song)
-        do_request(song.id)
+        do_request(song.guid)
         expect(response).to be_success
         expect(response.status).to eq 200
       end
@@ -23,7 +23,7 @@ describe SongsController do
 
     context 'when song does not exist' do
       it 'retruns the correct response' do
-        do_request(1)
+        do_request('damn')
         expect(response).not_to be_success
         expect(response.status).to eq 404
       end
@@ -31,7 +31,7 @@ describe SongsController do
   end
 
   describe 'create' do
-    let(:song_params) { { name: 'La Bamba', duration: 14600, artist_id: artist.id } }
+    let(:song_params) { { name: 'La Bamba', duration: 14600, artist_guid: artist.guid } }
     let(:json) { JSON.parse(response.body) }
 
     def do_request(params = {})
@@ -59,7 +59,13 @@ describe SongsController do
   describe 'update' do
     let!(:song) { Factory(:song) }
     let(:new_name) { "Sweet child O'mine" }
-    let(:song_params) { { id: song.id, name: new_name, duration: 14600, artist_id: artist.id } }
+    let(:song_params) do
+      { guid: song.guid,
+        name: new_name,
+        duration: 14600,
+        artist_guid: artist.guid
+      }
+    end
 
     def do_request(params = {})
       put :update, params
@@ -75,7 +81,7 @@ describe SongsController do
 
     context 'when song does not exist' do
       it 'returns the correct status' do
-        song_params[:id] = song.id + 1
+        song_params[:guid] = 'some_crazy_guid'
         expect { do_request(song_params) }.not_to change { Song.count }
         expect(response.status).to eq 404
       end
@@ -90,14 +96,14 @@ describe SongsController do
     context 'when song exists' do
       it 'returns success' do
         song = Factory(:song)
-        expect { do_request(id: song.id) }.to change { Song.count }.by(-1)
+        expect { do_request(guid: song.guid) }.to change { Song.count }.by(-1)
         expect(response).to be_success
       end
     end
 
     context 'when song does not exist' do
       it 'returns 404' do
-        expect { do_request(id: 1) }.not_to change { Song.count }
+        expect { do_request(guid: 'yeah') }.not_to change { Song.count }
         expect(response.status).to eq 404
       end
     end
@@ -105,9 +111,9 @@ describe SongsController do
     context 'when song fails to be deleted' do
       it 'returns 422' do
         song = Factory.stub(:song)
-        allow(Song).to receive(:find_by_id) { song }
+        allow(Song).to receive(:find_by_guid) { song }
         allow(song).to receive(:destroy) { false }
-        do_request(id: song.id)
+        do_request(guid: song.guid)
         expect(response.status).to eq 422
       end
     end

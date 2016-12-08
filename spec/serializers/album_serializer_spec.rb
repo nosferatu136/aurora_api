@@ -9,12 +9,12 @@ describe AlbumSerializer do
 
     expected_json = {
       album: {
-        id: album.id,
+        guid: album.guid,
         name: album.name,
         art_id: album.art_id,
         released_at: album.released_at,
-        artist: { id: artist.id, name: artist.name, bio: artist.bio, alias: artist.alias },
-        songs: [{ id: song.id, name: song.name, duration: song.duration, artist_id: song.artist_id }]
+        artist: { guid: artist.guid, name: artist.name, bio: artist.bio, alias: artist.alias },
+        songs: [{ guid: song.guid, name: song.name, duration: song.duration, artist_guid: song.artist_guid }]
       }
     }
 

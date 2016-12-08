@@ -7,10 +7,10 @@ describe SongWithoutArtistSerializer do
 
     expected_json = {
       song_without_artist: {
-        id: song.id,
+        guid: song.guid,
         name: song.name,
         duration: song.duration,
-        artist_id: artist.id
+        artist_guid: song.artist_guid
       }
     }
 
