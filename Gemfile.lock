@@ -26,6 +26,7 @@ GEM
       tzinfo (~> 0.3.29)
     activerecord-import (0.16.1)
       activerecord (>= 3.2)
+    activerecord-native_db_types_override (0.2.1)
     activeresource (3.2.22)
       activemodel (= 3.2.22)
       activesupport (= 3.2.22)
@@ -167,6 +168,7 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers (~> 0.8.0)
   activerecord-import
+  activerecord-native_db_types_override
   byebug
   capistrano
   coffee-rails (~> 3.2.1)
@@ -187,4 +189,4 @@ DEPENDENCIES
   uglifier (>= 1.0.3)
 
 BUNDLED WITH
-   1.13.5
+   1.13.7

@@ -6,7 +6,7 @@ gem 'active_model_serializers', '~> 0.8.0'
 gem 'activerecord-import'
 
 gem 'rails-api', '0.3.1'
-
+gem 'activerecord-native_db_types_override'
 gem 'mysql2', '0.3.21'
 gem 'json'
 
